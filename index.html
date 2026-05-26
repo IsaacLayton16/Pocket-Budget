@@ -13,9 +13,9 @@
         color-scheme: dark;
         --ink: #eef4ff;
         --muted: #9da9bd;
-        --line: #2f3b50;
+        --line: #40506a;
         --paper: #090f1d;
-        --panel: #111a2b;
+        --panel: #162238;
         --navy: #0c1423;
         --teal: #52d1ca;
         --coral: #ff8a7a;
@@ -35,8 +35,8 @@
         margin: 0;
         min-height: 100vh;
         background:
-          radial-gradient(circle at top left, rgba(82, 209, 202, 0.18), transparent 28rem),
-          linear-gradient(180deg, #090f1d 0%, #111827 100%);
+          radial-gradient(circle at top left, rgba(82, 209, 202, 0.14), transparent 28rem),
+          linear-gradient(180deg, #050914 0%, #0a1220 100%);
         color: var(--ink);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         touch-action: manipulation;
@@ -67,7 +67,7 @@
         width: 100%;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: #0d1525;
+        background: #111c30;
         color: var(--ink);
         padding: 0.75rem 0.85rem;
         outline: none;
@@ -111,9 +111,9 @@
       }
 
       .card {
-        border: 1px solid rgba(145, 160, 184, 0.16);
+        border: 1px solid rgba(145, 160, 184, 0.28);
         border-radius: 8px;
-        background: rgba(17, 26, 43, 0.94);
+        background: rgba(22, 34, 56, 0.98);
         box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
       }
 
@@ -121,17 +121,38 @@
         padding: 0.58rem 0.7rem;
       }
 
+      .purchase-date-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(142px, 0.65fr);
+        gap: 0.5rem;
+      }
+
+      .date-field {
+        min-width: 0;
+        padding-left: 0.55rem;
+        padding-right: 0.45rem;
+        font-size: 15px;
+      }
+
       .scroll-panel {
         min-height: 0;
+        overflow-x: hidden;
         overflow-y: auto;
         overscroll-behavior: contain;
         padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .scroll-panel::-webkit-scrollbar {
+        display: none;
       }
 
       .tab-button {
         border-radius: 8px;
         min-height: 38px;
-        background: rgba(17, 26, 43, 0.72);
+        border: 1px solid rgba(145, 160, 184, 0.12);
+        background: rgba(15, 25, 42, 0.92);
         color: var(--muted);
         font-size: 0.9rem;
         font-weight: 850;
@@ -139,7 +160,29 @@
 
       .tab-button.is-active {
         background: #52d1ca;
+        border-color: #52d1ca;
         color: #06111f;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .summary-icon {
+        display: grid;
+        width: 1.65rem;
+        height: 1.65rem;
+        place-items: center;
+        border-radius: 999px;
+        background: rgba(82, 209, 202, 0.14);
+        color: #8fe7e0;
+        font-size: 0.9rem;
+        font-weight: 950;
+        transition: transform 160ms ease;
+      }
+
+      details[open] .summary-icon {
+        transform: rotate(180deg);
       }
 
       .text-slate-500,
@@ -153,20 +196,20 @@
 
       .status-good {
         border-color: var(--green-border);
-        background: var(--green-bg);
+        background: #123428;
         color: var(--green-text);
       }
 
       .status-bad {
         border-color: var(--red-border);
-        background: var(--red-bg);
+        background: #4a2022;
         color: var(--red-text);
       }
     </style>
   </head>
   <body>
     <main class="safe-pad mx-auto flex w-full max-w-[430px] flex-col px-4 pb-4">
-      <header class="mb-3 rounded-lg bg-[#0c1423] px-4 pb-3 pt-3 text-white shadow-xl">
+      <header class="mb-3 rounded-lg bg-[#101b2e] px-4 pb-3 pt-3 text-white shadow-xl">
         <div class="flex items-start justify-between gap-3">
           <p class="text-sm font-black">Pocket Budget</p>
           <button id="resetData" class="btn min-h-0 bg-white/10 px-3 py-1.5 text-xs text-white">Reset</button>
@@ -194,7 +237,10 @@
       <details class="card mb-3 p-3">
         <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
           <span class="text-base font-black">Budget setup</span>
-          <span class="text-sm font-bold text-[#0d6668]">Edit</span>
+          <span class="flex items-center gap-2 text-sm font-bold text-[#8fe7e0]">
+            Edit
+            <span class="summary-icon" aria-hidden="true">v</span>
+          </span>
         </summary>
         <div class="mt-3 flex gap-2">
           <input id="totalBudget" class="field mini-field" inputmode="decimal" type="number" min="0" step="0.01" placeholder="Total budget" />
@@ -210,16 +256,19 @@
       <details class="card mb-3 p-3">
         <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
           <span class="text-base font-black">Add Purchase</span>
-          <p id="purchaseCount" class="text-xs font-bold text-slate-500">0 purchases</p>
+          <span class="flex items-center gap-2">
+            <span id="purchaseCount" class="text-xs font-bold text-slate-500">0 purchases</span>
+            <span class="summary-icon" aria-hidden="true">v</span>
+          </span>
         </summary>
         <form id="purchaseForm" class="mt-3 grid gap-2">
           <div class="grid grid-cols-[1fr_112px] gap-2">
             <input id="purchaseName" class="field mini-field" autocomplete="off" placeholder="Name" required />
             <input id="purchasePrice" class="field mini-field" inputmode="decimal" type="number" min="0.01" step="0.01" placeholder="Price" required />
           </div>
-          <div class="grid grid-cols-[1fr_112px] gap-2">
+          <div class="purchase-date-grid">
             <select id="purchaseCategory" class="field mini-field"></select>
-            <input id="purchaseDate" class="field mini-field" type="date" required />
+            <input id="purchaseDate" class="field mini-field date-field" type="date" required />
           </div>
           <button class="btn btn-primary min-h-0 w-full py-2" type="submit">Add purchase</button>
         </form>
@@ -240,7 +289,7 @@
             <option value="priceLow">Price low</option>
           </select>
         </div>
-        <div class="scroll-panel rounded-lg">
+        <div class="scroll-panel flex-1 rounded-lg">
           <div id="purchaseList" class="grid gap-2"></div>
           <div id="emptyState" class="card p-5 text-center text-sm font-semibold text-slate-500">
             No purchases yet. Add one above and it will save on this phone.
