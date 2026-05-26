@@ -261,18 +261,18 @@ function renderPurchases() {
     const over = overTotal || overCategory;
 
     const card = document.createElement("article");
-    card.className = `card grid grid-cols-[1fr_auto] gap-3 p-3 ${over ? "status-bad" : "status-good"}`;
+    card.className = `card grid grid-cols-[1fr_auto] gap-2 p-2.5 ${over ? "status-bad" : "status-good"}`;
     card.innerHTML = `
       <div class="min-w-0">
         <div class="flex items-center gap-2">
-          <h3 class="truncate text-base font-black">${escapeHtml(purchase.name)}</h3>
-          <span class="shrink-0 rounded-full bg-white/70 px-2 py-1 text-[11px] font-black uppercase">${over ? "Over" : "Good"}</span>
+          <h3 class="truncate text-sm font-black">${escapeHtml(purchase.name)}</h3>
+          <span class="shrink-0 rounded-full bg-white/70 px-1.5 py-0.5 text-[10px] font-black uppercase">${over ? "Over" : "Good"}</span>
         </div>
-        <p class="mt-1 text-sm font-semibold opacity-80">${escapeHtml(category.name || "Untitled")} - ${formatDate(purchase.date)}</p>
+        <p class="mt-0.5 text-xs font-semibold opacity-80">${escapeHtml(category.name || "Untitled")} - ${formatDate(purchase.date)}</p>
       </div>
       <div class="text-right">
-        <p class="text-lg font-black">${formatMoney(purchase.price)}</p>
-        <button class="mt-2 text-sm font-black opacity-80" type="button" data-delete="${purchase.id}">Delete</button>
+        <p class="text-base font-black">${formatMoney(purchase.price)}</p>
+        <button class="mt-1 text-xs font-black opacity-80" type="button" data-delete="${purchase.id}">Delete</button>
       </div>
     `;
     els.purchaseList.append(card);
