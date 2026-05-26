@@ -2,29 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#090f1d" />
     <title>Pocket Budget</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       :root {
-        color-scheme: light;
-        --ink: #172033;
-        --muted: #667085;
-        --line: #d9dee8;
-        --paper: #f7f4ee;
-        --panel: #fffdf8;
-        --navy: #172033;
-        --teal: #0f8b8d;
-        --coral: #e85d4f;
-        --green-bg: #e7f7ef;
-        --green-border: #8fd5ae;
-        --green-text: #12613a;
-        --red-bg: #fff0ec;
-        --red-border: #f2a197;
-        --red-text: #a83224;
+        color-scheme: dark;
+        --ink: #eef4ff;
+        --muted: #9da9bd;
+        --line: #2f3b50;
+        --paper: #090f1d;
+        --panel: #111a2b;
+        --navy: #0c1423;
+        --teal: #52d1ca;
+        --coral: #ff8a7a;
+        --green-bg: #10281f;
+        --green-border: #2f8f64;
+        --green-text: #8ee2b4;
+        --red-bg: #301a1c;
+        --red-border: #a74b43;
+        --red-text: #ffafa6;
       }
 
       * {
@@ -35,10 +35,11 @@
         margin: 0;
         min-height: 100vh;
         background:
-          radial-gradient(circle at top left, rgba(15, 139, 141, 0.16), transparent 34rem),
-          linear-gradient(180deg, #f7f4ee 0%, #eef3f4 100%);
+          radial-gradient(circle at top left, rgba(82, 209, 202, 0.18), transparent 28rem),
+          linear-gradient(180deg, #090f1d 0%, #111827 100%);
         color: var(--ink);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        touch-action: manipulation;
       }
 
       input,
@@ -58,6 +59,7 @@
       }
 
       .safe-pad {
+        padding-top: max(2rem, calc(env(safe-area-inset-top) + 0.85rem));
         padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
       }
 
@@ -65,14 +67,19 @@
         width: 100%;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: #ffffff;
+        background: #0d1525;
+        color: var(--ink);
         padding: 0.75rem 0.85rem;
         outline: none;
       }
 
+      .field::placeholder {
+        color: #718096;
+      }
+
       .field:focus {
         border-color: var(--teal);
-        box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.14);
+        box-shadow: 0 0 0 3px rgba(82, 209, 202, 0.18);
       }
 
       .btn {
@@ -88,26 +95,26 @@
       }
 
       .btn-primary {
-        background: var(--navy);
-        color: #ffffff;
-        box-shadow: 0 8px 22px rgba(23, 32, 51, 0.18);
+        background: #52d1ca;
+        color: #06111f;
+        box-shadow: 0 8px 22px rgba(82, 209, 202, 0.18);
       }
 
       .btn-soft {
-        background: #edf4f4;
-        color: #0d6668;
+        background: #172538;
+        color: #8fe7e0;
       }
 
       .btn-danger {
-        background: #fff0ec;
+        background: #301a1c;
         color: var(--red-text);
       }
 
       .card {
-        border: 1px solid rgba(23, 32, 51, 0.09);
+        border: 1px solid rgba(145, 160, 184, 0.16);
         border-radius: 8px;
-        background: rgba(255, 253, 248, 0.94);
-        box-shadow: 0 14px 34px rgba(23, 32, 51, 0.08);
+        background: rgba(17, 26, 43, 0.94);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
       }
 
       .mini-field {
@@ -124,15 +131,20 @@
       .tab-button {
         border-radius: 8px;
         min-height: 38px;
-        background: rgba(255, 253, 248, 0.72);
+        background: rgba(17, 26, 43, 0.72);
         color: var(--muted);
         font-size: 0.9rem;
         font-weight: 850;
       }
 
       .tab-button.is-active {
-        background: var(--navy);
-        color: #ffffff;
+        background: #52d1ca;
+        color: #06111f;
+      }
+
+      .text-slate-500,
+      .text-slate-600 {
+        color: var(--muted) !important;
       }
 
       [hidden] {
@@ -153,8 +165,8 @@
     </style>
   </head>
   <body>
-    <main class="safe-pad mx-auto flex w-full max-w-[430px] flex-col px-4 pb-4 pt-3 sm:pt-4">
-      <header class="mb-3 rounded-lg bg-[#172033] px-4 pb-3 pt-3 text-white shadow-xl">
+    <main class="safe-pad mx-auto flex w-full max-w-[430px] flex-col px-4 pb-4">
+      <header class="mb-3 rounded-lg bg-[#0c1423] px-4 pb-3 pt-3 text-white shadow-xl">
         <div class="flex items-start justify-between gap-3">
           <p class="text-sm font-black">Pocket Budget</p>
           <button id="resetData" class="btn min-h-0 bg-white/10 px-3 py-1.5 text-xs text-white">Reset</button>
